@@ -1,3 +1,4 @@
+// eslint.config.js
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
@@ -20,7 +21,22 @@ const eslintConfig = [
       "next-env.d.ts",
     ],
     rules: {
+      // Turn off explicit any rule project-wide
       "@typescript-eslint/no-explicit-any": "off",
+
+      // Relax unused vars so `_prefixed` variables don't trigger errors.
+      // Keep it as a warning for visibility, not an error.
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^_",
+          "caughtErrorsIgnorePattern": "^_"
+        }
+      ],
+
+      // If you still want to treat general no-unused-vars as error, keep eslint's default off and use TS rule above.
+      "no-unused-vars": "off"
     },
   },
 ];
