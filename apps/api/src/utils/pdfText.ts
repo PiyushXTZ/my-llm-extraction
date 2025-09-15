@@ -1,7 +1,6 @@
 // apps/api/src/utils/pdfText.ts
 // import { getDocument, GlobalWorkerOptions } from "pdfjs-dist/legacy/build/pdf";
-import { getDocument, GlobalWorkerOptions } from "pdfjs-dist/legacy/build/pdf.mjs";
-
+import { getDocument, GlobalWorkerOptions } from "pdfjs-dist/legacy/build/pdf";
 export async function extractTextFromPdf(pdfData: Uint8Array): Promise<string>  {
   // pdfjs-dist legacy build works in Node; no worker config required for this usage.
   // But optionally we set workerSrc if you bundle a worker — not needed for server-side.
