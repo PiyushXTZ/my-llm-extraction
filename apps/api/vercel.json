@@ -1,17 +1,14 @@
 {
-  "buildCommand": "pnpm install && pnpm run build",
+  "version": 2,
   "functions": {
-    "dist/index.js": {
-      "runtime": "@vercel/node@2"
+    "apps/api/dist/index.js": {
+      "runtime": "nodejs18.x"
     }
   },
-  "rewrites": [
+  "routes": [
     {
-      "source": "/(.*)",
-      "destination": "/src/index.js"
+      "src": "/(.*)",
+      "dest": "apps/api/dist/index.js"
     }
-  ],
-  "env": {
-    "PNPM_VERSION": "9.0.0"
-  }
+  ]
 }
