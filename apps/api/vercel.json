@@ -1,0 +1,19 @@
+{
+  
+  "functions": {
+    "api/index.ts": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "installCommand": "pnpm install",
+  "buildCommand": "pnpm run build",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/index.ts"
+    }
+  ],
+  "env": {
+    "PNPM_VERSION": "9.0.0"
+  }
+}
