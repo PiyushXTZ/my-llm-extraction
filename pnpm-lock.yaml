@@ -50,6 +50,9 @@ importers:
       pdfjs-dist:
         specifier: ^5.4.149
         version: 5.4.149
+      serverless-http:
+        specifier: ^4.0.0
+        version: 4.0.0
       uuid:
         specifier: ^13.0.0
         version: 13.0.0
@@ -69,6 +72,9 @@ importers:
       '@types/node':
         specifier: ^24.4.0
         version: 24.4.0
+      '@types/pdf-parse':
+        specifier: ^1.1.5
+        version: 1.1.5
       nodemon:
         specifier: ^3.1.10
         version: 3.1.10
@@ -1101,6 +1107,9 @@ packages:
 
   '@types/node@24.4.0':
     resolution: {integrity: sha512-gUuVEAK4/u6F9wRLznPUU4WGUacSEBDPoC2TrBkw3GAnOLHBL45QdfHOXp1kJ4ypBGLxTOB+t7NJLpKoC3gznQ==}
+
+  '@types/pdf-parse@1.1.5':
+    resolution: {integrity: sha512-kBfrSXsloMnUJOKi25s3+hRmkycHfLK6A09eRGqF/N8BkQoPUmaCr+q8Cli5FnfohEz/rsv82zAiPz/LXtOGhA==}
 
   '@types/qs@6.14.0':
     resolution: {integrity: sha512-eOunJqu0K1923aExK6y8p6fsihYEn/BYuQ4g0CxAAgFc4b/ZLN4CrsRZ55srTdqoiLzU2B2evC+apEIxprEzkQ==}
@@ -2842,6 +2851,10 @@ packages:
     resolution: {integrity: sha512-61g9pCh0Vnh7IutZjtLGGpTA355+OPn2TyDv/6ivP2h/AdAVX9azsoxmg2/M6nZeQZNYBEwIcsne1mJd9oQItQ==}
     engines: {node: '>= 18'}
 
+  serverless-http@4.0.0:
+    resolution: {integrity: sha512-KKl9h1+VApX9y2vHsVMogf906UXBwO3FDYiWPzqS0mCjEEx4Sx91JrssbWA7RN43HBuxrtoh8MkocZPvjyGnLg==}
+    engines: {node: '>=12.0'}
+
   set-function-length@1.2.2:
     resolution: {integrity: sha512-pgRc4hJ4/sNjWCSS9AmnS40x3bNMDTknHgL5UaMBTMyJnU90EgWh1Rz+MC9eFu4BuN/UwZjKQuY/1v3rM7HMfg==}
     engines: {node: '>= 0.4'}
@@ -4044,6 +4057,10 @@ snapshots:
   '@types/node@24.4.0':
     dependencies:
       undici-types: 7.11.0
+
+  '@types/pdf-parse@1.1.5':
+    dependencies:
+      '@types/node': 24.4.0
 
   '@types/qs@6.14.0': {}
 
@@ -5968,6 +5985,8 @@ snapshots:
       send: 1.2.0
     transitivePeerDependencies:
       - supports-color
+
+  serverless-http@4.0.0: {}
 
   set-function-length@1.2.2:
     dependencies:

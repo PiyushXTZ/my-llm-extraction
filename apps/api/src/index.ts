@@ -1,15 +1,18 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import invoiceRoutes from "./routes/invoiceRoutes";
-import uploadRoutes from "./routes/uploadRoutes";
-import extractRoutes from "./routes/extractRoutes";
-import { connectDB } from "./utils/db";
+import invoiceRoutes from "./routes/invoiceRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
+import extractRoutes from "./routes/extractRoutes.js";
+import { connectDB } from "./utils/db.js";
+import serverless from "serverless-http";
+
 dotenv.config();
 
 const app = express();
+
 app.use(cors({
-  origin: "http://localhost:3000", 
+  origin: process.env.FRONTEND_ORIGIN || "http://localhost:3000",
   methods: ["GET", "POST", "PUT", "DELETE"],
 }));
 app.use(express.json());
@@ -19,8 +22,8 @@ app.use("/invoices", invoiceRoutes);
 app.use("/upload", uploadRoutes);
 app.use("/extract", extractRoutes);
 
-const PORT = process.env.PORT || 4000;
+// connect DB once at cold start
+await connectDB();
 
-connectDB().then(() => {
-  app.listen(PORT, () => console.log(`✅ API running on http://localhost:${PORT}`));
-});
+// export a handler for Vercel
+export const handler = serverless(app);

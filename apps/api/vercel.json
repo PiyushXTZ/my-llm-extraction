@@ -1,16 +1,14 @@
 {
-  
+  "buildCommand": "pnpm install && pnpm run build",
   "functions": {
-    "api/index.ts": {
-      "runtime": "nodejs18.x"
+    "dist/index.js": {
+      "runtime": "@vercel/node@2"
     }
   },
-  "installCommand": "pnpm install",
-  "buildCommand": "pnpm run build",
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/api/index.ts"
+      "destination": "/src/index.js"
     }
   ],
   "env": {
