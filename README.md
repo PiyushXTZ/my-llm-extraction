@@ -1,135 +1,205 @@
-# Turborepo starter
+# Internship Assignment – PDF Viewer + Data Extraction Dashboard
 
-This Turborepo starter is maintained by the Turborepo core team.
+A monorepo project to upload, view, and extract invoice data from PDFs using **Google Gemini**, with a **MongoDB backend**, **Vercel Blob storage**, and a **Next.js dashboard**.  
+Deployed entirely on **Vercel** (web + API).
 
-## Using this example
+---
 
-Run the following command:
+## 🎯 Features
 
-```sh
-npx create-turbo@latest
+- **PDF Viewer**
+  - Upload PDFs (≤25 MB) and render with zoom + page navigation.
+  - Stored securely in **Vercel Blob**.
+
+- **AI Data Extraction (Gemini)**
+  - Extracts key invoice fields (vendor, invoice details, line items).
+  - Uses **Gemini API** for structured data extraction.
+
+- **Editable Dashboard**
+  - Right panel with editable form for extracted fields.
+  - Full CRUD (create, read, update, delete) on MongoDB.
+  - Search invoices by vendor name or invoice number.
+
+- **API (REST)**
+  - Endpoints for upload, extract, list, update, and delete invoices.
+  - Consistent JSON schema with validation.
+
+---
+
+## 📦 Tech Stack
+
+- **Monorepo**: Turborepo / pnpm workspaces  
+- **Frontend**: Next.js (App Router) + TypeScript + [shadcn/ui]
+- **Backend**: Node.js (TypeScript) REST API  
+- **Database**: MongoDB Atlas  
+- **AI**: Google Gemini API  
+- **File Storage**: Vercel Blob  
+- **PDF Viewer**: [pdf.js]
+- **Deploy**: Vercel for web + Render for api 
+
+---
+
+## 📂 Repo Structure
+
+```bash
+.
+├── apps/
+│   ├── web     # Next.js frontend
+│   └── api     # Node.js backend
+├── packages/   # (optional) shared types / utils
+└── README.md
 ```
 
-## What's inside?
+---
 
-This Turborepo includes the following packages/apps:
+## ⚙️ Setup & Installation
 
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
+### 1. Clone repo
+```bash
+git clone https://github.com/PiyushXTZ/my-llm-extraction.git
+cd my-llm-extraction
 ```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+### 2.Install dependencies (monorepo root)
+```bash
+pnpm install
 ```
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+### 3.Environment variables
+```bash
+For apps/web/.env.local
+NEXT_PUBLIC_API_URL=https://<your-api-url>.vercel.app
+
+For apps/api/.env
+MONGODB_URI=<your-mongodb-atlas-uri>
+GEMINI_API_KEY=<your-gemini-api-key>
+BLOB_READ_WRITE_TOKEN=<vercel-blob-token>
 
 ```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+### 4. Run locally
+```bash
+Start frontend (Next.js):
+pnpm --filter web dev
+# http://localhost:3000
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
+Start backend (API):
+pnpm --filter api dev
+# http://localhost:4000 (default)
 ```
 
-### Develop
+## 📑 API Documentation
 
-To develop all apps and packages, run the following command:
+---
+
+### 1. **Upload PDF**
+**Endpoint:**  POST /upload
+Response:
+
+```bash
+{
+  "fileId": "abc123",
+  "fileName": "invoice.pdf"
+}
+```
+### 2. **Extract Data (Gemini)**
+**Endpoint:**  POST /extract
+Response:
+
+```bash
+{
+  "vendor": {
+    "name": "ACME Corp",
+    "address": "123 Street",
+    "taxId": "TAX123"
+  },
+  "invoice": {
+    "number": "INV-001",
+    "date": "2023-12-01",
+    "currency": "USD",
+    "subtotal": 100,
+    "taxPercent": 10,
+    "total": 110,
+    "poNumber": "PO-567",
+    "poDate": "2023-11-28",
+    "lineItems": [
+      {
+        "description": "Widget",
+        "unitPrice": 50,
+        "quantity": 2,
+        "total": 100
+      }
+    ]
+  }
+}
 
 ```
-cd my-turborepo
+### **3. Get All Invoices**
+**Endpoint:**  GET /invoices
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+```bash
+Query Params
+q → search by vendor.name or invoice.number
+```
+### **4. Get Invoice by ID**
+**Endpoint:**  GET /invoices/:id
+```bash
+The Document
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+### **5. Update Invoice**
+**Endpoint:**  PUT /invoices/:id
+Response:
+```bash
+{
+  "success": true,
+  "message": "Invoice updated successfully"
+}
 
 ```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+### **6. Delete Invoice**
+**Endpoint:**  DELETE /invoices/:id
+Response:
+```bash
+{
+  "success": true,
+  "message": "Invoice deleted successfully"
+}
 
 ```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+## 💾 Minimal Data Schema
+```bash
+{
+  fileId: string,
+  fileName: string,
+  vendor: {
+    name: string,
+    address?: string,
+    taxId?: string
+  },
+  invoice: {
+    number: string,
+    date: string,
+    currency?: string,
+    subtotal?: number,
+    taxPercent?: number,
+    total?: number,
+    poNumber?: string,
+    poDate?: string,
+    lineItems: Array<{
+      description: string,
+      unitPrice: number,
+      quantity: number,
+      total: number
+    }>
+  },
+  createdAt: string,
+  updatedAt?: string
+}
 ```
+## 🚀 Deployment & Deliverables
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+- **GitHub Monorepo**: [PiyushXTZ/my-llm-extraction](https://github.com/PiyushXTZ/my-llm-extraction)  
+- **Web Application**: [my-llm-extraction-web.vercel.app](https://my-llm-extraction-web.vercel.app/)  
+- **API Endpoint**: [my-llm-extraction-1.onrender.com](https://my-llm-extraction-1.onrender.com/)  
+- **Demo Video**: [Watch here](https://drive.google.com/file/d/1HVdOAtI27MC4l-_KZySFqx5eE_YQk2a2/view)  
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+---
