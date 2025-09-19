@@ -1,4 +1,4 @@
-# Internship Assignment – PDF Viewer + Data Extraction Dashboard
+# PDF Viewer + Data Extraction Dashboard
 
 A monorepo project to upload, view, and extract invoice data from PDFs using **Google Gemini**, with a **MongoDB backend**, **Vercel Blob storage**, and a **Next.js dashboard**.  
 Deployed entirely on **Vercel** (web + API).
